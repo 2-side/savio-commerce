@@ -30,7 +30,7 @@ RUN composer install --optimize-autoloader --no-interaction
 
 # Copy package files for frontend
 COPY --chown=www-data:www-data package.json package-lock.json /var/www/html/
-RUN npm ci
+RUN npm ci --omit=optional
 
 # Copy rest of the app
 COPY --chown=www-data:www-data . /var/www/html/
