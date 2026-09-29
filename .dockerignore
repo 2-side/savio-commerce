@@ -1,0 +1,59 @@
+# Dependencies (installed during build)
+vendor/
+node_modules/
+
+# Git
+.git/
+.github/
+.gitignore
+.gitattributes
+
+# Environment files (use env_file in compose or Render env vars)
+.env
+.env.*
+!.env.example
+
+# IDE
+.idea/
+.vscode/
+.editorconfig
+.DS_Store
+.phpactor.yml
+_ide_helper.php
+_ide_helper_models.php
+
+# Tests
+tests/
+phpunit.xml
+
+# Storage (will be mounted or managed separately)
+storage/logs/
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/testing/*
+storage/framework/views/*
+
+# Built assets (built during Docker build)
+public/build/
+public/css/
+public/js/
+public/fonts/
+public/hot
+
+# Docker files
+Dockerfile*
+docker-compose*.yml
+compose.*.yml
+
+# Documentation
+README.md
+*.md
+
+# Logs
+npm-debug.log
+yarn-error.log
+*.log
+
+# Other
+stubs/
+eslint.config.js

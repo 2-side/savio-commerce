@@ -1,0 +1,17 @@
+@import '../../../../vendor/filament/filament/resources/css/theme.css';
+
+@source '../../../../app/Filament/**/*';
+@source '../../../../resources/views/filament/**/*';
+
+/*
+ * Registering a custom theme replaces Filament's own precompiled CSS
+ * (vendor/filament/filament/dist/theme.css), which normally ships with
+ * every class the panel chrome needs already baked in. Because /vendor
+ * is gitignored, Tailwind's automatic source detection skips it, so the
+ * panel's own vendor code (Filament core, Lunar's admin package, and any
+ * Filament plugins) must be scanned explicitly or their classes silently
+ * disappear from the compiled CSS.
+ */
+@source '../../../../vendor/filament/**/*';
+@source '../../../../vendor/lunarphp/lunar/**/*';
+@source '../../../../vendor/leandrocfe/filament-apex-charts/**/*';

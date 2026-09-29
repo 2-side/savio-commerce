@@ -1,0 +1,59 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        USER_ID: ${USER_ID:-1000}
+        GROUP_ID: ${GROUP_ID:-1000}
+    image: savio-commerce:latest
+    container_name: savio-commerce
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "${APP_PORT:-8080}:8080"
+    volumes:
+      # Mount storage for uploads/media
+      - ./storage:/var/www/html/storage
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/up"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Laravel processes queued jobs (QUEUE_CONNECTION=database) but nothing
+  # runs `queue:work` unless something does — this does that, in the same
+  # image, without a second Dockerfile.
+  queue:
+    image: savio-commerce:latest
+    container_name: savio-commerce-queue
+    restart: unless-stopped
+    depends_on:
+      - app
+    env_file:
+      - .env
+    command: ["php", "artisan", "queue:work", "--sleep=3", "--tries=3"]
+    # The base image's built-in healthcheck expects a web server on :8080;
+    # this container doesn't run one, so disable it rather than show a
+    # perpetually misleading "unhealthy" status.
+    healthcheck:
+      disable: true
+
+  # Laravel's scheduler expects `schedule:run` every minute (cron does this
+  # on a real server); this loops it inside the container instead.
+  scheduler:
+    image: savio-commerce:latest
+    container_name: savio-commerce-scheduler
+    restart: unless-stopped
+    depends_on:
+      - app
+    env_file:
+      - .env
+    entrypoint: ["sh", "-c"]
+    command:
+      - "while true; do php artisan schedule:run; sleep 60; done"
+    # Same reasoning as the queue service above.
+    healthcheck:
+      disable: true
