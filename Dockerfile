@@ -35,6 +35,9 @@ RUN npm ci --omit=optional
 # Copy rest of the app
 COPY --chown=www-data:www-data . /var/www/html/
 
+RUN NODE_ENV=development npm install
+
+
 # Build frontend assets (as www-data to avoid permission issues)
 RUN npm run build
 
